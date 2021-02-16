@@ -120,7 +120,7 @@ while 1:
 
         i = 1
 
-        s = input("\nr -> remove repo by id\nar -> add repo\nau -> add user\n? ( r/ar/au ):")
+        s = input("\nr -> remove repo by id\nar -> add repo\nau -> add user\ndu -> delete user\n? ( r/ar/au/du ):")
 
         if s == "r":
             is_removed_flag = 0
@@ -155,7 +155,7 @@ while 1:
             if is_removed_flag:
                 print("repo deleted : "+ target_repo )
             else:
-                print("there isnt a repo with name : "+ target_repo)
+                print("there isnt a repo with id : ",target)
 
         elif s == "ar":
             f = open("source", "r")
@@ -208,12 +208,50 @@ while 1:
             f.close()
 
         elif s == "au":
-                newname = input("\n\nnew name:")
+            newname = input("\n\nnew name:")
                 
-                arg = f"repositories start {newname}\nrepositories end\n\n"
-                f = open("source", "a")
-                f.write(arg)
-                f.close()
+            arg = f"repositories start {newname}\nrepositories end {newname}\n\n"
+            f = open("source", "a")
+            f.write(arg)
+            f.close()
+
+        elif s == "du":
+            name = input("user name will deleted :")
+
+            f = open("source", "r")
+            content = f.read()
+            f.close()
+
+            if not(name in content):
+                print("there is not a user with name : "+name)
+                continue
+
+            lines = content.split("\n")
+            rflag = 0
+            lastname =""
+
+            for line in lines:
+                if ("repositories end {}".format(name) in line) and (rflag == 1):
+                    content = content.replace("{}\n".format(line), "")
+                    print("user {} and all repositories related are deleted.".format(name))
+                    break
+
+                if (rflag == 1) and (lastname == name):
+                    content = content.replace("{}\n".format(line), "")
+                    continue
+
+                if "repositories start " in line:
+                    rname = line.replace("repositories start ", "")
+
+                    if rname == name:
+                        content = content.replace("{}\n".format(line), "")
+                        rflag = 1
+
+                    lastname = rname
+
+            f = open("source", "w")
+            f.write(content)
+            f.close()
                         
         else:
             print("-\nunvalid input\n-")
