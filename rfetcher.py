@@ -191,19 +191,19 @@ while 1:
             newline = f"{host}/{rname}\n"
 
             newlines = list()
-            for l in lines:
-                if selected_name in l:
-                    newlines.append(l)
+            for line in lines:
+                if (selected_name in line) and ("start" in line):
+                    newlines.append(line)
                     newlines.append(newline) 
                     continue
 
-                newlines.append(l)
+                newlines.append(line)
 
             f = open("source", "w")
 
-            for linen in newlines:
-                if linen != "\n":
-                    f.write(linen)
+            for line in newlines:
+                if line != "\n":
+                    f.write(line)
 
             f.close()
 
