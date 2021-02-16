@@ -274,6 +274,6 @@ class App():
             print("-\nunvalid input\n-")
             return
 
-
-my_app = App()
+if __name__ == "__main__":
+    my_app = App()
 
