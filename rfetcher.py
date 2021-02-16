@@ -1,34 +1,50 @@
 import os, sys
 
-print("******************\nrepository fetcher\n\noptions:")
-print("1  download source")
-print("2  edit source")
-print("q  for exit")
-print("d  for delete the\nsource")
-print("******************")
+class App():
+    def __init__(self, f=True):
+        if f:
+            self.run()
+
+    def run(self):
+        print("******************\nrepository fetcher\n\noptions:")
+        print("1  download source")
+        print("2  edit source")
+        print("q  for exit")
+        print("d  for delete the\nsource")
+        print("******************")
+
+        while 1:
 
 
+            # creating source if it isnt exist
+            try:
+                f = open("source", "r")
+                f.close()
+            except:
+                f = open("source","w")
+                f.write("")
+                f.close()
 
+            sw = input("choose : ")
 
-while 1:
-    # creating source if it isnt exist
-    try:
-        f = open("source", "r")
-        f.close()
-    except:
-        f = open("source","w")
-        f.write("")
-        f.close()
+            if sw == "d":
+                os.remove("source")
+                print("source deleted.\nnew source created.")
+                continue
 
-    sw = input("choose : ")
+            elif sw == "q":
+                sys.exit()
 
-    if sw == "d":
-        os.remove("source")
-        print("source deleted.\nnew source created.")
-        continue
+            elif sw == "1":
+                self.download_source()
+            
+            elif sw == "2":
+                self.edit_source()
+            else:
+                print("-\nunvalid input\n-")
+                continue
 
-    elif sw == "1":
-        # to return current path
+    def download_source(self):
         current_path = os.getcwd()
 
         sw2 = input("path to download (empty for working dir):")
@@ -58,12 +74,12 @@ while 1:
 
             except:
                 print("-\nunvalid input of path\n-")
-                continue
+                return
 
 
         else:
             print("-\nunvalid input of path\n-")
-            continue
+            return
 
 
         with open("{}/source".format(current_path),"r") as f:
@@ -90,7 +106,7 @@ while 1:
         print("\nsource is empty.")
         os.chdir(current_path)
 
-    elif sw == "2":
+    def edit_source(self):
         f = open("source", "r")
         c = f.readlines()
         f.close()
@@ -182,6 +198,7 @@ while 1:
 
                 if flag:
                     break
+
                 print("-\nthere is not a user with this name!\n-")
                 sys.exit()
 
@@ -224,7 +241,7 @@ while 1:
 
             if not(name in content):
                 print("there is not a user with name : "+name)
-                continue
+                return
 
             lines = content.split("\n")
             rflag = 0
@@ -255,9 +272,8 @@ while 1:
                         
         else:
             print("-\nunvalid input\n-")
-            continue
+            return
 
-    elif sw == "q":
-        sys.exit()
-    else:
-        print("-\nunvalid input\n-")
+
+my_app = App()
+
