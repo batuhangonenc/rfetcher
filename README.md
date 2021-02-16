@@ -5,10 +5,13 @@
 #### repositories start username
 #### host/repository-name
 #### another-host/repository-name2
-#### repositories end
+#### repositories end username
 ####
 ### repositories start another-username
-#### host(kod.pardus.org.tr or another host)/another-repository-name
-#### repositories end
+#### host/another-repository-name
+#### repositories end another-username
 ####
 
+### host syntax:
+#### github.com
+#### kod.pardus.org.tr
