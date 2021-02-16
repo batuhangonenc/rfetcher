@@ -1,33 +1,73 @@
 import os, sys
 
-print("\n**********\nrepository fetcher\n\n")
-print("1- download source")
-print("2- edit source\n\n")
+print("******************\nrepository fetcher\n\noptions:")
+print("1  download source")
+print("2  edit source")
+print("q  for exit")
+print("d  for delete the\nsource")
+print("******************")
 
 
-try:
-    os.chdir("sources")
-    os.chdir("..")
-except:
-    os.mkdir("sources")
-
-try:
-    f = open("source", "r")
-    f.close()
-except:
-    f = open("source","w")
-    f.write("")
-    f.close()
 
 
 while 1:
+    # creating source if it isnt exist
+    try:
+        f = open("source", "r")
+        f.close()
+    except:
+        f = open("source","w")
+        f.write("")
+        f.close()
+
     sw = input("choose : ")
 
-    if sw == "1":
-        with open("source","r") as f:
+    if sw == "d":
+        os.remove("source")
+        print("source deleted.\nnew source created.")
+        continue
+
+    elif sw == "1":
+        # to return current path
+        current_path = os.getcwd()
+
+        sw2 = input("path to download (empty for working dir):")
+        if sw2 == "":
+            print("current dir = {}\ncreating sources dir if not exists...".format(os.getcwd()))
+
+            try:
+                os.chdir("sources")
+            except:
+                os.mkdir("sources")
+                os.chdir("sources")
+
+            print("current dir = {}".format(os.getcwd()))
+
+        elif len(sw2) > 1:
+            try:
+                os.chdir(sw2)
+
+                print("current path = {}\ncreating sources dir if not exists...".format(os.getcwd()))
+                try:
+                    os.chdir("sources")
+                except:
+                    os.mkdir("sources")
+                    os.chdir("sources")
+
+                print("current path = {}".format(os.getcwd()))
+
+            except:
+                print("-\nunvalid input of path\n-")
+                continue
+
+
+        else:
+            print("-\nunvalid input of path\n-")
+            continue
+
+
+        with open("{}/source".format(current_path),"r") as f:
             lines = f.readlines()
-            
-            os.chdir("sources")
             
             for line in lines:
                 if "repositories start" in line:
@@ -38,14 +78,17 @@ while 1:
 
                         if "repositories end" in repo:
                             print("\n----------\nall repos downloaded from source\n\n")
+                            os.chdir(current_path)
+                            
                             sys.exit()
 
                         host, rname = repo.replace("\n","").split("/")
                         arg = f"git clone http://{host}/{name}/{rname} {rname}"
                         print(arg)
                         os.system(arg)
-        
-        os.chdir("..")
+
+        print("\nsource is empty.")
+        os.chdir(current_path)
 
     elif sw == "2":
         f = open("source", "r")
@@ -77,9 +120,11 @@ while 1:
 
         i = 1
 
-        s = input("\n\ndo you want to remove or edit? ( r/ar/au ):")
+        s = input("\nr -> remove repo by id\nar -> add repo\nau -> add user\n? ( r/ar/au ):")
 
         if s == "r":
+            is_removed_flag = 0
+            target_repo = ""
             target = int(input("\nselect a repo with number:"))
             linesm = list()
 
@@ -92,6 +137,9 @@ while 1:
                     if "repositories" not in line and "/" in line:
                         if i == target:
                             lines.remove(line)
+
+                            target_repo = line
+                            is_removed_flag = 1
                     
                         i = i+1
                 f.close()
@@ -104,6 +152,11 @@ while 1:
 
             f.close()
         
+            if is_removed_flag:
+                print("repo deleted : "+ target_repo )
+            else:
+                print("there isnt a repo with name : "+ target_repo)
+
         elif s == "ar":
             f = open("source", "r")
             lines = f.readlines()
