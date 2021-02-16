@@ -3,10 +3,11 @@
 
 ### basic syntax of source:
 #### repositories start username
-#### host(github.com)/repository-name
+#### host/repository-name
+#### another-host/repository-name2
 #### repositories end
 ####
-#### repositories start another-username
+### repositories start another-username
 #### host(kod.pardus.org.tr or another host)/another-repository-name
 #### repositories end
 ####
