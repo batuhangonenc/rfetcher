@@ -225,8 +225,16 @@ class App():
             f.close()
 
         elif s == "au":
-            newname = input("\n\nnew name:")
+            content = open("source", "r").read()
+
+            while 1:
+                newname = input("\n\nnew name:")    
                 
+                if newname in content:
+                    print("-\nthis username already in use.\n-")
+                    continue
+                break
+
             arg = f"repositories start {newname}\nrepositories end {newname}\n\n"
             f = open("source", "a")
             f.write(arg)
